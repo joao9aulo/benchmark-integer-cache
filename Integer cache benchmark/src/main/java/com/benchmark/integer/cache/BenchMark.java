@@ -12,82 +12,102 @@ import java.util.concurrent.TimeUnit;
 public class BenchMark {
 
     @Benchmark
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.SECONDS)
     @BenchmarkMode(Mode.AverageTime)
-    public int sumCached1() {
-        return somaNumeros(1, true);
+    public List cached1() {
+        return instantiateNumbers(1, true);
     }
 
     @Benchmark
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.SECONDS)
     @BenchmarkMode(Mode.AverageTime)
-    public int sumCached100() {
-        return somaNumeros(100, true);
+    public List cached100() {
+        return instantiateNumbers(100, true);
     }
 
     @Benchmark
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.SECONDS)
     @BenchmarkMode(Mode.AverageTime)
-    public int sumCached1000() {
-        return somaNumeros(1000, true);
+    public List cached1000() {
+        return instantiateNumbers(1000, true);
     }
 
     @Benchmark
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.SECONDS)
     @BenchmarkMode(Mode.AverageTime)
-    public int sumCached10000() {
-        return somaNumeros(10000, true);
-    }
-////////////////////////////////////////////////
-    @Benchmark
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
-    @BenchmarkMode(Mode.AverageTime)
-    public int sumOutOfRangeCache1() {
-        return somaNumeros(1, false);
+    public List cached10000() {
+        return instantiateNumbers(10000, true);
     }
 
     @Benchmark
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.SECONDS)
     @BenchmarkMode(Mode.AverageTime)
-    public int sumOutOfRangeCache100() {
-        return somaNumeros(100, false);
+    public List cached100000() {
+        return instantiateNumbers(100000, true);
     }
 
     @Benchmark
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.SECONDS)
     @BenchmarkMode(Mode.AverageTime)
-    public int sumOutOfRangeCache1000() {
-        return somaNumeros(1000, false);
+    public List cached1000000() {
+        return instantiateNumbers(1000000, true);
+    }
+
+    ////////////////////////////////////////////////
+    @Benchmark
+    @OutputTimeUnit(TimeUnit.SECONDS)
+    @BenchmarkMode(Mode.AverageTime)
+    public List OutOfRangeCache1() {
+        return instantiateNumbers(1, false);
     }
 
     @Benchmark
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.SECONDS)
     @BenchmarkMode(Mode.AverageTime)
-    public int sumOutOfRangeCache10000() {
-        return somaNumeros(10000, false);
+    public List OutOfRangeCache100() {
+        return instantiateNumbers(100, false);
     }
 
-    public static Integer somaNumeros(int quantidade, boolean somarMenoresQue128) {
-        if (quantidade <= 0) {
-            return 0;
-        }
+    @Benchmark
+    @OutputTimeUnit(TimeUnit.SECONDS)
+    @BenchmarkMode(Mode.AverageTime)
+    public List OutOfRangeCache1000() {
+        return instantiateNumbers(1000, false);
+    }
 
+    @Benchmark
+    @OutputTimeUnit(TimeUnit.SECONDS)
+    @BenchmarkMode(Mode.AverageTime)
+    public List OutOfRangeCache10000() {
+        return instantiateNumbers(10000, false);
+    }
+
+    @Benchmark
+    @OutputTimeUnit(TimeUnit.SECONDS)
+    @BenchmarkMode(Mode.AverageTime)
+    public List OutOfRangeCache100000() {
+        return instantiateNumbers(100000, false);
+    }
+
+    @Benchmark
+    @OutputTimeUnit(TimeUnit.SECONDS)
+    @BenchmarkMode(Mode.AverageTime)
+    public List OutOfRangeCache1000000() {
+        return instantiateNumbers(1000000, false);
+    }
+
+    public static List instantiateNumbers(int quantity, boolean minorThan128) {
         List<Integer> numeros = new ArrayList<>();
-        if (somarMenoresQue128) {
-            for (int i = 0; i < 128 && i < quantidade; i++) {
+        if (minorThan128) {
+            for (int i = 0; i < 128 && i < quantity; i++) {
                 numeros.add(i);
             }
         } else {
-            for (int i = 128; i < Integer.MAX_VALUE && numeros.size() < quantidade; i++) {
+            for (int i = 128; i < Integer.MAX_VALUE && numeros.size() < quantity; i++) {
                 numeros.add(i);
             }
         }
 
-        Integer soma = 0;
-        for (Integer numero : numeros) {
-            soma += numero;
-        }
-
-        return soma;
+        return numeros;
     }
 }
